@@ -1,0 +1,4 @@
+{font-size:100%}
+div.content {width:97%;}
+div.top,div.middle,div.middleLeft,div.middleLeft2,div.middleRight,div.middleRight2,div.bottom {width:97%;}
+div.middleLeft,div.middleLeft2,div.middleRight,div.middleRight2 {float:none;}

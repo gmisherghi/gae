@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>m6z.org</title>
+<style>
+body {background-color:#000000;color:#11EE11;}
+canvas.awesome {margin-left:auto;margin-right:auto;}
+</style>
+
+<script type="application/javascript">
+var kWidth = 400
+var kHeight = 400
+
+var kCircleRadius = 175
+var kCircleText = '369358925061393564053883693774'
+function DrawCircleChar(ctx, chr, radians) {
+  ctx.save()
+  ctx.font = "40px monospace"
+
+  ctx.rotate(-radians)
+  ctx.translate(0, -kCircleRadius)
+  ctx.rotate(radians)
+  ctx.translate(kWidth/2 - 3, kHeight/2 + 6)
+  ctx.fillText(chr, 0, 0)
+
+  ctx.restore()
+}
+
+var kGridXChars = 11
+var kGridYChars = 7
+// var kGridText = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ʌʇuɯƃɟǝɐ'
+var kGridText = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ '
+var kGridCharOffsets = [2720, 1515, 7627, 6338, 7019, 4788, 6254, 6988, 3386, 4501, 5308, 9964, 6891, 4514, 7812, 1806, 4897, 2541, 1603, 2925, 3353, 4749, 8328, 7613, 9517, 6371, 3287, 5720, 7675, 3571, 1499, 3077, 1773, 658, 6924, 2176, 8018, 5895, 2366, 5317, 2814, 5038, 470, 7670, 1535, 2779, 6708, 6153, 1742, 8152, 1032, 8368, 3318, 3062, 9351, 6570, 9074, 38, 5805, 4399, 910, 3681, 3258, 3367, 165, 4086, 1466, 1184, 8492, 1489, 8602, 7658, 3480, 5198, 4115, 7359, 8437, 5019, 8495, 1518, 973, 5054, 4194, 7252, 4480, 7520, 1803, 2512, 8554, 8492, 2038, 3227, 3199, 2125, 6835, 9941, 2623, 9577, 2559, 3921, 7799, 3370, 705, 4725, 830, 7661, 2374, 7546, 5260, 1960, 9792, 2009, 1072, 5566, 8865, 2692, 7812, 3962, 6191, 5899, 240, 8944, 6060, 1605, 5719, 7130, 3407, 6640, 8737, 9200, 2847, 207, 5011, 8067, 1212, 9497, 2810, 5605, 8516, 1579, 9589, 1543, 2694, 1506, 5120, 8301, 612, 5924, 5117, 9875]
+var kGridTimeOffsets = [2428, 5407, 3505, 8283, 1376, 3445, 5590, 8571, 8309, 2859, 2776, 9474, 7295, 5690, 165, 7991, 4741, 4394, 6232, 1221, 6175, 8455, 9659, 6155, 253, 7600, 6092, 5122, 8856, 8528, 4078, 3864, 9213, 434, 243, 1432, 3869, 7667, 2427, 9247, 8228, 6339, 9027, 9938, 9090, 8748, 5444, 5733, 9563, 7289, 5784, 6431, 5932, 2634, 1397, 4422, 6614, 1050, 9351, 4696, 920, 8470, 2860, 499, 1602, 7663, 7143, 4548, 4184, 7125, 7190, 9522, 8644, 6930, 8393, 5034, 8408, 4814, 2634, 6948, 7169, 1480, 5219, 6537, 9246, 2895, 6441, 3917, 9169, 1672, 6855, 6071, 8573, 8018, 7982, 9685, 6898, 2648, 9891, 6004, 2363, 6155, 2222, 1122, 2130, 5280, 3853, 8604, 7281, 7525, 5846, 8180, 3734, 7299, 7604, 4501, 2839, 3020, 9571, 7329, 1128, 4544, 7525, 1041, 7465, 8303, 2239, 6128, 3028, 5598, 2836, 2321, 2512, 1134, 5986, 3015, 6652, 2034, 9839, 7581, 303, 8969, 1414, 9546, 3174, 5558, 1938, 6838, 750, 7056]
+var kGridPeriod = [1028, 1302, 830, 1125, 912, 755, 1530, 1866, 1008, 1351, 1546, 1350, 1003, 1931, 1000, 1880, 1304, 1689, 1142, 1869, 1384, 1688, 828, 1681, 1148, 1890, 1812, 823, 947, 1026, 1903, 1413, 898, 1665, 1271, 1962, 1359, 1890, 1400, 1779, 1546, 1963, 1679, 1456, 1456, 1249, 906, 1586, 947, 1697, 1176, 1640, 791, 1871, 1963, 1079, 1018, 1412, 1164, 826, 824, 1898, 1924, 800, 1266, 1692, 1543, 1004, 1854, 778, 1671, 1209, 878, 772, 1654, 1636, 1023, 1604, 1840, 1282, 1191, 792, 947, 1062, 875, 1108, 1648, 1403, 781, 1989, 1975, 1151, 1643, 1323, 1819, 1259, 1377, 1887, 884, 1149, 1854, 1831, 831, 1300, 1857, 1152, 1131, 1854, 966, 1017, 1573, 1284, 1708, 800, 1605, 827, 1812, 1719, 1957, 1789, 859, 1820, 1171, 1797, 861, 873, 981, 1286, 1455, 1936, 1428, 1749, 1372, 847, 879, 1036, 1953, 904, 1228, 1124, 1088, 1325, 1717, 1915, 1008, 1679, 1657, 1580, 1730, 754]
+
+function DrawGridChar(ctx, x, y, t) {
+  var index = x + y * kGridXChars
+  t = Math.floor((t + kGridTimeOffsets[index]) / kGridPeriod[index])
+  chr = kGridText[(43 * t + kGridCharOffsets[index]) % kGridText.length]
+
+  ctx.save()
+  ctx.font = "30px monospace"
+  ctx.translate(kWidth/2, kHeight/2)
+  ctx.fillText(chr,
+               (x - kGridXChars/2 + 0.5)*21,
+               (y - kGridYChars/2 + 0.5)*29)
+  ctx.restore()
+}
+
+function Draw(canvas, ctx) {
+  ctx.save()
+  ctx.clearRect(0, 0, kWidth, kHeight)
+
+  var t = new Date().getTime()
+  var time_rot = (t % 30000) / 30000;
+  
+  for (i = 0; i < kCircleText.length; ++i) {
+    var radians = i / kCircleText.length;
+    radians = radians + time_rot;
+    radians = radians * Math.PI*2
+    DrawCircleChar(ctx, kCircleText[i], radians);
+  }
+
+  for (y = 0; y < kGridYChars; ++y) {
+    for (x = 0; x < kGridXChars; ++x) {
+      DrawGridChar(ctx, x, y, t)
+    }
+  }
+
+  ctx.restore()
+}
+
+function Init() {
+  var canvas = document.getElementById('awesome');
+  var ctx = canvas.getContext('2d');
+  ctx.strokeStyle = "#11EE11";
+  ctx.fillStyle = "#11EE11";
+
+  setInterval(function() {Draw(canvas,ctx)}, 10)
+}
+</script>
+
+<body onLoad="Init();">
+m6z.org<br>
+
+<canvas id="awesome" width="400px" height="400px"></canvas>
